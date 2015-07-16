@@ -1,2 +1,5 @@
 inherit_from:
   - .rubocop_cocoapods.yml
+
+ParameterLists:
+  CountKeywordArgs: false

@@ -1,5 +1,9 @@
 inherit_from:
   - .rubocop_cocoapods.yml
 
+AllCops:
+  Exclude:
+    - ./vendor/bundle/**/*
+
 ParameterLists:
   CountKeywordArgs: false

@@ -12,5 +12,20 @@ module Cork
         board.should.be.verbose
       end
     end
+
+    describe '#puts' do
+      it 'calls out#puts when not silent' do
+        @board.out.expects(:puts).with('abc')
+        @board.puts('abc')
+      end
+
+      it 'call out#puts with an empty string when not silent' do
+        @board.out.expects(:puts).with('abc')
+        @board.puts('abc')
+      end
+    end
   end
 end
+
+
+      it does not call out#puts when silent

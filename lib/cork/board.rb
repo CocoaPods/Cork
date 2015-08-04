@@ -1,6 +1,7 @@
 module Cork
  class Board
   attr_reader :input
+
   attr_reader :out
   attr_reader :err
 
@@ -58,7 +59,7 @@ module Cork
     def path(pathname, relative_to = Pathname.cpwd)
       if pathname
       path = Pathname(pathname).relative_path_from(from_path)
-      "`#{{path}}`"
+      "`#{path}`"
     else
       ''
     end
@@ -120,3 +121,6 @@ end
 end
 end
 UI = UserInterface
+
+#--- bring in def notice, def wrap_string and and also the wrap string in UI and several other things
+#--puts warning, def info, def label, def puts indented---#

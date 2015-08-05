@@ -1,4 +1,5 @@
 # encoding: utf-8
+
 module Cork
   class Board
     # Creates the formatted banner to present as help of the provided command
@@ -133,6 +134,184 @@ module Cork
                                                desc_start,
                                                MAX_WIDTH)
 end
+
+      # @!group Overrides
+      #________________________________________________________________________#
+
+      # @return [String] A decorated title.
+      #
+      def prettify_title(title)
+        title.ansi.underline
+      end
+
+      # @return [String] A decorated textual representation of the subcommand
+      #         name.
+      #
+      def prettify_subcommand(name)
+        name.chomp.ansi.green
+      end
+
+      # @return [String] A decorated textual representation of the option name.
+      #
+      #
+      def prettify_option_name(name)
+        name.chomp.ansi.blue
+      end
+
+      # @return [String] A decorated textual representation of the command.
+      #
+      def prettify_signature(command, subcommand, argument)
+        components = [
+          [command, :green],
+          [subcommand, :green],
+          [argument, :magenta],
+        ]
+        components.reduce('') do |memo, (string, ansi_key)|
+          next memo if !string || string.empty?
+          memo << ' ' << string.ansi.apply(ansi_key)
+        end.lstrip
+      end
+
+      # @return  [String] A decorated command description.
+      #
+      def prettify_message(command, message)
+        message = message.dup
+        command.arguments.each do |arg|
+          arg.names.each do |name|
+            message.gsub!("`#{name.gsub(/\.{3}$/, '')}`", '\0'.ansi.magenta)
+          end
+        end
+        command.options.each do |(name, _description)|
+          message.gsub!("`#{name}`", '\0'.ansi.blue)
+        end
+        message
+      end
+
+      # @!group Private helpers
+      #-----------------------------------------------------------------------#
+
+      # @return [Array<String>] The lsit of the subcommands to use in the
+      #         banner.
+      #
+      def subcommands_for_banner
+        command.subcommands_for_command_lookup.reject do |subcommand|
+          subcommand.summary.nil?
+        end.sort_by(&:command)
+      end
+
+      # @return [Fixnum] The width of the largest command name or of the
+      #         largest option name. Used to align all the descriptions.
+      #
+      def compute_max_name_width
+        widths = []
+        widths << command.options.map { |option| option.first.size }
+        widths << subcommands_for_banner.map do |cmd|
+          cmd.command.size + SUBCOMMAND_BULLET_SIZE
+        end.max
+        widths.flatten.compact.max || 1
+      end
+
+
+      module TextWrapper
+        # @return [String] Wraps a formatted string (e.g. markdown) by stripping
+        #          heredoc indentation and wrapping by word to the terminal width
+        #          taking into account a maximum one, adn indenting the string.
+        #          Code lines (i.e. indented by four spaces) are not wrapped.
+        #
+        # @param [String]
+        #        The string to format.
+        #
+        # @param  [Fixnum] max_width
+        #         The maximum width to use to format the string if the terminal
+        #         is too wide.
+        #
+        def self.wrap_foramtted_text(string, indent = 0, max_width = 80)
+          paragraphs = strip_heredoc(string).split("\n\n")
+          paragraphs =paragraphs.map do |paragraph|
+            if paragraph.start_with?(' '* 4)
+              paragraphs.gsub!(/\n/, "\n#{' ' * indent}")
+            else
+              paragraph = wrap_with_indent(paragraph, indent, max_width)
+            end
+            paragraph.insert(0, ' ' * indent).rstrip
+          end
+          paragraphs.join("\n\n")
+        end
+
+        # @return [String] Wraps a string to the terminal width taking into
+        #         account the given indentation.
+        #
+        # @param  [String] string
+        #         The string to indent.
+        #
+        # @param  [Fixnum] indent
+        #         The number of spaces to insert before the string.
+        #
+        # @param  [Fixnum] max_width
+        #         The maximum width to use to format the string if the terminal
+        #         is too wide.
+        #
+        def self.wrap_with_indent(string, indent = 0, max_width = 80)
+          if terminal_width == 0
+            width = max_width
+          else
+            width = [terminal_width, max_width].min
+          end
+
+          full_line = string.gsub("\n", ' ')
+          available_width = width - indent
+          space = ' ' * indent
+          word_wrap(full_line, available_width).split("\n").join("\n#{space}")
+        end
+
+        # @return [String] Lifted straigth from Actionview. Thanks guys!
+        #
+
+        def self.strip_heredoc(string)
+          if min = string.scan(/^[\t]*(?=\S)/).min
+            string.gsub(/^[\t]{#{min.size}}/, '')
+          else
+            string
+          end
+        end
+
+        # @!group Private helpers
+        #---------------------------------------------------------------------#
+
+        # @return [Fixnum] The width of the current terminal unless being piped.
+        #
+        def self.terminal_width
+          unless @terminal_width
+            if !ENV['CLAIDE_DISABLE_AUTO_WRAP'] &&
+              STDOUT.tty? && system('which tput > /dev/null 2>&1')
+              @terminal_width = `tput cols`.to_i
+            else
+              @terminal_width = 0
+            end
+          end
+          @terminal_width
+        end
+      end
+    end
+  end
+end
+
+
+
+
+
+
+
+
+
+
+
+        #-- @return [Fixnum] The width of the current terminal unless being piped.--#
+        #
+
+
+
+
 
 
 

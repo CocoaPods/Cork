@@ -47,7 +47,7 @@ module Cork
 
     # Stores important warning to the user optionally followed by actions that the user should take. To print them use {#print_warnings}.
     #
-    # @param [String] message The message to print.
+    #  @param [String] message The message to print.
     #  @param [Array]  actions The actions that the user should take.
     #
     # return [void]
@@ -93,7 +93,7 @@ module Cork
 
 
     private
-end
+  end
     # @!group Helpers
     #-------------------------------------------------------------------#
 
@@ -107,7 +107,7 @@ end
     # @return [String]    The formatted string.
     #
     # @note If Cork is not being run in a terminal or the width of the
-    #terminal is to samll a width of 80 is assumed.
+    #terminal is to small a width of 80 is assumed.
     #
     def wrap_string(string, indent =0)
       if disable_wrap

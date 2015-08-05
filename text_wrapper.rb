@@ -108,8 +108,7 @@ module Cork
         end.join("\n")
       end
 
-      # @return [String] The line describing a single entry (subcommand or
-      #         option).
+      # @return [String] The section describing the options of the command.
       #
       def formatted_options_description
         options = command.options
@@ -124,7 +123,6 @@ module Cork
     #
     def entry_description(name,description,name_width)
         max_name_width = compute_max_name_width
-        desc_start = max_name_width
         desc_start = max_name_width + (TEXT_INDENT -2) + DESCRIPTION_SPACES
         result = ' ' * (TEXT_INDENT -2)
         result << name
@@ -218,10 +216,13 @@ end
         #          taking into account a maximum one, adn indenting the string.
         #          Code lines (i.e. indented by four spaces) are not wrapped.
         #
-        # @param [String]
+        # @param   [String] string
         #        The string to format.
         #
-        # @param  [Fixnum] max_width
+        #@param    [Fixnum] indent
+        #          The number of spaces to insert before the string.
+        #
+        # @param   [Fixnum] max_width
         #         The maximum width to use to format the string if the terminal
         #         is too wide.
         #
@@ -264,12 +265,17 @@ end
           word_wrap(full_line, available_width).split("\n").join("\n#{space}")
         end
 
-        # @return [String] Lifted straigth from Actionview. Thanks guys!
+        # @return [String] Lifted straigth from Actionview. Thanks Guys!
         #
+        def self.word_wrap(line, line_width)
+          line.gsub(/(.{1,#{line_width}})(\s+|$)/, "\\1\n").strip
+        end
 
+        # @return [String] Lifted straigth from Actionview. Thanks Guys!
+        #
         def self.strip_heredoc(string)
           if min = string.scan(/^[\t]*(?=\S)/).min
-            string.gsub(/^[\t]{#{min.size}}/, '')
+            string.gsub(/^[ \t]{#{min.size}}/, '')
           else
             string
           end
@@ -304,10 +310,6 @@ end
 
 
 
-
-
-        #-- @return [Fixnum] The width of the current terminal unless being piped.--#
-        #
 
 
 

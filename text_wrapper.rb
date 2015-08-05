@@ -107,6 +107,33 @@ module Cork
         end.join("\n")
       end
 
+      # @return [String] The line describing a single entry (subcommand or
+      #         option).
+      #
+      def formatted_options_description
+        options = command.options
+        options.map do |name, description|
+          pretty_name = prettify_option_name(name)
+          entry_description(pretty_name, description, name.size)
+        end.join("\n")
+      end
+
+    # @return [String] The line describing a single entry (subcommand or
+    # option.)
+    #
+    def entry_description(name,description,name_width)
+        max_name_width = compute_max_name_width
+        desc_start = max_name_width
+        desc_start = max_name_width + (TEXT_INDENT -2) + DESCRIPTION_SPACES
+        result = ' ' * (TEXT_INDENT -2)
+        result << name
+        result << ' ' * DESCRIPTION_SPACES
+        result << ' ' * (max_name_width - name_width)
+        result << TextWrapper.wrap_with_indent(description,
+                                               desc_start,
+                                               MAX_WIDTH)
+end
+
 
 
 

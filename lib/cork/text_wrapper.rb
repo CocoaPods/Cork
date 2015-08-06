@@ -17,7 +17,7 @@ module Cork
     #         The maximum width to use to format the string if the terminal
     #         is too wide.
     #
-    def self.wrap_foramtted_text(string, indent = 0, max_width = 80)
+    def wrap_formatted_text(string, indent = 0, max_width = 80)
       paragraphs = strip_heredoc(string).split("\n\n")
       paragraphs = paragraphs.map do |paragraph|
         if paragraph.start_with?(' ' * 4)
@@ -29,6 +29,8 @@ module Cork
       end
       paragraphs.join("\n\n")
     end
+
+    module_function :wrap_formatted_text
 
     # @return [String] Wraps a string to the terminal width taking into
     #         account the given indentation.
@@ -43,7 +45,7 @@ module Cork
     #         The maximum width to use to format the string if the terminal
     #         is too wide.
     #
-    def self.wrap_with_indent(string, indent = 0, max_width = 80)
+    def wrap_with_indent(string, indent = 0, max_width = 80)
       if terminal_width == 0
         width = max_width
       else
@@ -56,15 +58,19 @@ module Cork
       word_wrap(full_line, available_width).split("\n").join("\n#{space}")
     end
 
-    # @return [String] Lifted straigth from Actionview. Thanks Guys!
-    #
-    def self.word_wrap(line, line_width)
-      line.gsub(/(.{1,#{line_width}})(\s+|$)/, "\\1\n").strip
-    end
+    module_function :wrap_with_indent
 
     # @return [String] Lifted straigth from Actionview. Thanks Guys!
     #
-    def self.strip_heredoc(string)
+    def word_wrap(line, line_width)
+      line.gsub(/(.{1,#{line_width}})(\s+|$)/, "\\1\n").strip
+    end
+
+    module_function :word_wrap
+
+    # @return [String] Lifted straigth from Actionview. Thanks Guys!
+    #
+    def strip_heredoc(string)
       if min = string.scan(/^[ \t]*(?=\S)/).min
         string.gsub(/^[ \t]{#{min.size}}/, '')
       else
@@ -72,12 +78,14 @@ module Cork
       end
     end
 
+    module_function :strip_heredoc
+
     # @!group Private helpers
     #---------------------------------------------------------------------#
 
     # @return [Fixnum] The width of the current terminal unless being piped.
     #
-    def self.terminal_width
+    def terminal_width
       unless @terminal_width
         if !ENV['CORK_DISABLE_AUTO_WRAP'] &&
             STDOUT.tty? && system('which tput > /dev/null 2>&1')
@@ -88,5 +96,7 @@ module Cork
       end
       @terminal_width
     end
+
+    module_function :terminal_width
   end
 end

@@ -23,18 +23,18 @@ module Cork
       end
 
       it 'allows specifying input' do
-        board =Board.new(:input => $stdin)
-        board.stdin.should == $stdin
+        board = Board.new(:input => $stdin)
+        board.input.should == $stdin
       end
 
       it 'allows specifying out' do
         board = Board.new(:out => $stdout)
-        board.stdout.shoud == $stdout
+        board.out.should == $stdout
       end
 
       it 'allows specifying err' do
         board = Board.new(:err => $stderr)
-        board.stderr.should == $stderr
+        board.err.should == $stderr
       end
     end
 
@@ -67,7 +67,6 @@ module Cork
         @board.stubs(:silent?).returns(true)
         @board.out.expects(:print).never
         @board.print('abc')
-        @board.print
       end
     end
 
@@ -83,28 +82,35 @@ module Cork
       end
     end
 
-    #---Check These Tests with Samuel. @param test are challenging--#
-
-#---  describe '#initialize' do----#
-      it 'allows passing an array of strings' do
-        board = Board.new(:param => [String])
-        board.should.be.passing.an.array.of.strings
-      end
-
-      it 'allows passing an array of arrays' do
-        board = Board.new(:param => [Array])
-        board.should.be.passing.an.array.of.arrays
-      end
-  #---  end --- move 88-97 into the initialize block at the top --- #
-
     describe '#warn' do
-      it 'does store and print a warning message' do
-        @board.should.be.printing.a.warning
+      it 'stores a warning message' do
+        @board.warn('warning')
+        @board.warnings.should == [{
+          :message => 'warning',
+          :actions => [],
+          :verbose_only => false,
+        }]
+      end
+
+      it 'allows passing an array of actions' do
+        @board.warn('warning', %w(action1 action2))
+        @board.warnings.should == [{
+          :message => 'warning',
+          :actions => %w(action1 action2),
+          :verbose_only => false,
+        }]
+      end
+
+      it 'allows specifying whether the warning is verbose only' do
+        @board.warn('warning', %w(action1 action2), true)
+        @board.warnings.should == [{
+          :message => 'warning',
+          :actions => %w(action1 action2),
+          :verbose_only => true,
+        }]
       end
     end
   end
 end
-
-
-
-    #---  it 'does not call out#puts when silent' do ----#
+#---Check These Tests with Samuel. @param test are challenging--#
+#---  it 'does not call out#puts when silent' do ----#

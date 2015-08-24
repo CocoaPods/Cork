@@ -44,6 +44,3 @@ DEPENDENCIES
   prettybacon
   rake (>= 10.0)
   rubocop
-
-BUNDLED WITH
-   1.10.5

@@ -111,7 +111,7 @@ module Cork
         (' ' * indent) + string
       else
         first_space = ' ' * indent
-        indented = TextWrapper.warp_with_indent(string, indent, 9999)
+        indented = TextWrapper.wrap_with_indent(string, indent, 9999)
         first_space + indented
       end
     end

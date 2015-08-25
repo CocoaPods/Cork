@@ -144,31 +144,27 @@ module Cork
         UI.output.should == "-label:  value\n"
       end
 
-
       it 'uses the indentation level' do
-
+        UI.indentation_level = 10
+        UI.output.should == "#{' ' * 10}- label:  value\n"
       end
 
-
       it 'prints array values on separate lines, no indentation level ' do
-
-
-
-
+        UI.indentation_level = 10
+        UI.output.should == "- label:\n  -value1\n"
       end
 
       it 'prints array values (1) on separate lines with indentation levels' do
-
+        UI. indentation_level = 10
+        UI.output.should == "#{'' * 10}- label:\n#{' ' * 12}- value1\n"
       end
 
-
       it 'prints array values (3) on separate lines with indentation level' do
-
-
-
-
-  end
+        UI.indentation_level = 10
+        values = %w(value1 value2 value3)
+        UI.labeled('label', values, 12)
+        UI.output.should == "#{' ' * 10}- label:\n" + values.map
+        { |v| "#{' ' * 12}- #{v}\n" }.join
+      end
+   end
 end
-#---Check These Tests with Samuel. @param test are challenging--#
-#---  it 'does not call out#puts when silent' do ----#
-#----- I need to test lines 67 to 123------#

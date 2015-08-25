@@ -104,7 +104,7 @@ module Cork
     # @return [String]    The formatted string.
     #
     # @note If Cork is not being run in a terminal or the width of the
-    # terminal is to small a width of 80 is assumed.
+    # terminal is too small a width of 80 is assumed.
     #
     def wrap_string(string, indent = 0)
       if disable_wrap

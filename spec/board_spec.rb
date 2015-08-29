@@ -61,7 +61,7 @@ module Cork
       it 'calls out#print when not silent' do
         @board.out.expects(:print).with('abc')
         @board.print('abc')
-      -end
+      end
 
       it 'does not call out#print when silent' do
         @board.stubs(:silent?).returns(true)
@@ -109,38 +109,33 @@ module Cork
           :verbose_only => true,
         }]
       end
+    end
 
-      describe '#path' do
-        it 'creates a path relative to path' do
-          @board.path('path')
-          @board.print('path')
+    describe '#path' do
+      it 'creates a path relative to path' do
+        @board.path('path')
+        @board.print('path')
       end
+    end
 
-      describe '#path' do
-        it 'does not create a path relative to path' do
-          @board.path('path')
-          @board.print('path')
-      end
-
-
-      describe '#labeled' do
-        it 'prints nothing if value is nil' do
-          UI. labeled('label', nil)
-          UI. output.should == ''
+    describe '#labeled' do
+      it 'prints nothing if value is nil' do
+        UI.labeled('label', nil)
+        UI.output.should == ''
       end
 
       it 'prints label and value on one line if value is not an array' do
-        UI. labeled('label', 'value', 12)
+        UI.labeled('label', 'value', 12)
         UI.output.should == "- label:    value\n"
-      end
+        end
 
       it 'justifies the label' do
-        UI. labeled('label', 'value', 30)
+        UI.labeled('label', 'value', 30)
         UI.output.should == "-label:#{'' *22}value\n"
       end
 
       it 'justifies the label with default justification' do
-        UI. labeled('label', 'value') #defaults to 12
+        UI.labeled('label', 'value') #defaults to 12
         UI.output.should == "-label:  value\n"
       end
 
@@ -155,7 +150,7 @@ module Cork
       end
 
       it 'prints array values (1) on separate lines with indentation levels' do
-        UI. indentation_level = 10
+        UI.indentation_level = 10
         UI.output.should == "#{'' * 10}- label:\n#{' ' * 12}- value1\n"
       end
 
@@ -163,8 +158,22 @@ module Cork
         UI.indentation_level = 10
         values = %w(value1 value2 value3)
         UI.labeled('label', values, 12)
-        UI.output.should == "#{' ' * 10}- label:\n" + values.map
-        { |v| "#{' ' * 12}- #{v}\n" }.join
+        UI.output.should == "#{' ' * 10}- label:\n" + values.map do |v|
+          "#{' ' * 12}- #{v}\n"
+        end.join
       end
-   end
+    end
+
+    describe '#wrap_with_indent' do
+      it 'wrap_string with a default indentation of zero' do
+        UI.indentation_level = 0
+        UI.output.should == 0
+      end
+
+      it 'creates a first space the size of the string times the indentation' do
+        UI.indentation_level = 0
+        UI.output.should == ''
+      end
+    end
+  end
 end

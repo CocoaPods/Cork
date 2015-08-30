@@ -108,6 +108,7 @@ module Cork
           :actions => %w(action1 action2),
           :verbose_only => true,
         }]
+
       end
     end
 

@@ -62,6 +62,8 @@ module Cork
     #
     # return [void]
     #
+    # Stores important warning message to the user optionally followed by actions
+    # that the user should take. To print them use {#print_warnings}
     def warn(message, actions = [], verbose_only = false)
       warnings << {
         :message      => message,
@@ -70,6 +72,10 @@ module Cork
       }
     end
 
+    # Returns a string containing relative location of a path from the Podfile.
+    # The returned path is quoted. If the argument is nil it retruns an empyt
+    # string.
+    #
     def path(pathname, relative_to = Pathname.pwd)
       if pathname
         path = Pathname(pathname).relative_path_from(relative_to)

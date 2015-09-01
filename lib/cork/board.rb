@@ -154,7 +154,6 @@ module Cork
       self.indentation_level += relative_indentation
       self.title_level += 1
       yield if block_given?
-
       self.indentation_level -= relative_indentation
       self.title_level -= 1
     end
@@ -167,7 +166,7 @@ module Cork
     def titled_section(title, options = {})
       relative_indentation = options[:relative] || 0
       verbose_prefix = options [:verbose_prefix] || ''
-      if config.verbose?
+      if verbose?
         title(title, verbose_prefix, relative_indentation)
       else
         puts title
@@ -217,7 +216,7 @@ module Cork
       if @treat_titles_as_messages
         message(title, verbose_prefix)
       else
-        title = verbose_prefix + title if config.verbose?
+        title = verbose_prefix + title if verbose?
         title = "\n#{title}" if @title_level < 2
         if (color = @title_colors[title_level])
           title = title.send(color)
@@ -340,10 +339,3 @@ module Cork
   end
 end
 UI = UserInterface
-
-
-
-
-#--- bring in def notice, def wrap_string and and also the wrap string in UI
-# and several other things
-#--puts warning, def info, def label, def puts indented---#

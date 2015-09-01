@@ -4,7 +4,7 @@ module Cork
   module TextWrapper
     # @return [String] Wraps a formatted string (e.g. markdown) by stripping
     #          heredoc indentation and wrapping by word to the terminal width
-    #          taking into account a maximum one, adn indenting the string.
+    #          taking into account a maximum one, and indenting the string.
     #          Code lines (i.e. indented by four spaces) are not wrapped.
     #
     # @param   [String] string

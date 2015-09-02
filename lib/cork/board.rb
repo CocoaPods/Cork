@@ -41,6 +41,9 @@ module Cork
       @silent = silent
       @ansi = ansi
       @warnings = []
+      @title_colors      =  %w(    yellow green    )
+      @title_level       =  0
+      @indentation_level =  2
     end
 
     # Prints a message followed by a new line unless silent.
@@ -49,7 +52,7 @@ module Cork
       out.puts(message) unless silent?
     end
 
-    # Prints a message followed by a new line unless silent.
+    # Prints a message without a new line unless silent.
     #
     def print(message)
       out.print(message) unless silent?
@@ -112,8 +115,8 @@ module Cork
         title = "- #{label}:"
         if value.is_a?(Enumerable)
           lines = [wrap_string(title, indentation_level)]
-          value.each do |v|
-            lines << wrap_string("- #{v}", indentation_level + 2)
+          lines += value.map do |v|
+            wrap_string("- #{v}", indentation_level + 2)
           end
           puts lines.join("\n")
         else
@@ -338,4 +341,3 @@ module Cork
     end
   end
 end
-UI = UserInterface

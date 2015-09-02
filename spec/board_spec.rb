@@ -3,10 +3,36 @@ require File.expand_path('../spec_helper', __FILE__)
 module Cork
   describe Board do
     before do
-      @board = Board.new
+      @output = StringIO.new
+      @board = Board.new(:out => @output)
     end
 
     describe '#initialize' do
+      it 'disables verbose by default' do
+        @board.should.not.be.verbose
+      end
+
+      it 'does not silence by default' do
+        @board.should.not.be.silent
+      end
+
+      it 'uses ansi codes by default' do
+        @board.should.be.ansi
+      end
+
+      it 'uses stdin by default for input' do
+        @board.input.should ==  $stdin
+      end
+
+      it 'uses stdout by default for output' do
+        @board = Board.new
+        @board.out.should == $stdout
+      end
+
+      it 'uses stderr by default for errors' do
+        @board.err.should == $stderr
+      end
+
       it 'allows specifying verbose' do
         board = Board.new(:verbose => true)
         board.should.be.verbose
@@ -39,44 +65,39 @@ module Cork
     end
 
     describe '#puts' do
-      it 'calls out#puts when not silent' do
-        @board.out.expects(:puts).with('abc')
+      it 'outputs the given string with a new line' do
         @board.puts('abc')
+        @output.string.should == "abc\n"
       end
 
       it 'calls out#puts with an empty string when not silent' do
-        @board.out.expects(:puts).with('abc')
-        @board.puts('abc')
+        @board.out.expects(:puts).with('')
+        @board.puts
       end
 
-      it 'does not call out#puts when silent' do
-        @board.stubs(:silent?).returns(true)
-        @board.out.expects(:puts).never
+      it 'does not output given string when silent' do
+        @board = Board.new(:silent => true)
         @board.puts('abc')
         @board.puts
+        @output.string.should == ''
       end
     end
 
     describe '#print' do
-      it 'calls out#print when not silent' do
-        @board.out.expects(:print).with('abc')
+      it 'outputs the given string when not silent' do
         @board.print('abc')
+        @output.string.should == 'abc'
       end
 
-      it 'does not call out#print when silent' do
-        @board.stubs(:silent?).returns(true)
-        @board.out.expects(:print).never
+      it 'does not output the given value when silent' do
+        @board = Board.new(:silent => true)
         @board.print('abc')
+        @output.string.should == ''
       end
     end
 
     describe '#gets' do
       it 'calls input#gets' do
-        @board.input.expects(:gets).returns('abc')
-        @board.gets.should == 'abc'
-      end
-
-      it 'does not call input#gets' do
         @board.input.expects(:gets).returns('abc')
         @board.gets.should == 'abc'
       end
@@ -108,73 +129,74 @@ module Cork
           :actions => %w(action1 action2),
           :verbose_only => true,
         }]
-
       end
     end
 
     describe '#path' do
-      it 'creates a path relative to path' do
-        @board.path('path')
-        @board.print('path')
+      it 'creates a path relative to a given path' do
+        path = @board.path('/lib/cork', Pathname('/lib'))
+        path.should == '`cork`'
+      end
+
+      it 'creates a path relative to current working directory by default' do
+        path = @board.path(Pathname.pwd + 'abc')
+        path.should == '`abc`'
+      end
+
+      it 'returns an empty string when no path is given' do
+        path = @board.path(nil)
+        path.should == ''
       end
     end
 
     describe '#labeled' do
       it 'prints nothing if value is nil' do
-        UI.labeled('label', nil)
-        UI.output.should == ''
+        @board.labeled('label', nil)
+        @output.string.should == ''
       end
 
       it 'prints label and value on one line if value is not an array' do
-        UI.labeled('label', 'value', 12)
-        UI.output.should == "- label:    value\n"
-        end
+        @board.labeled('label', 'value', 12)
+        @output.string.should == "  - label:    value\n"
+      end
 
       it 'justifies the label' do
-        UI.labeled('label', 'value', 30)
-        UI.output.should == "-label:#{'' *22}value\n"
+        @board.labeled('label', 'value', 30)
+        @output.string.should == "  - label:#{' ' * 22}value\n"
       end
 
       it 'justifies the label with default justification' do
-        UI.labeled('label', 'value') #defaults to 12
-        UI.output.should == "-label:  value\n"
+        @board.labeled('label', 'value')  # defaults to 12
+        @output.string.should == "  - label:    value\n"
       end
 
       it 'uses the indentation level' do
-        UI.indentation_level = 10
-        UI.output.should == "#{' ' * 10}- label:  value\n"
+        @board.instance_variable_set(:@indentation_level, 10)
+        @board.labeled('label', 'value')
+        @output.string.should == "#{' ' * 10}- label:    value\n"
       end
 
-      it 'prints array values on separate lines, no indentation level ' do
-        UI.indentation_level = 10
-        UI.output.should == "- label:\n  -value1\n"
-      end
-
-      it 'prints array values (1) on separate lines with indentation levels' do
-        UI.indentation_level = 10
-        UI.output.should == "#{'' * 10}- label:\n#{' ' * 12}- value1\n"
-      end
-
-      it 'prints array values (3) on separate lines with indentation level' do
-        UI.indentation_level = 10
-        values = %w(value1 value2 value3)
-        UI.labeled('label', values, 12)
-        UI.output.should == "#{' ' * 10}- label:\n" + values.map do |v|
-          "#{' ' * 12}- #{v}\n"
-        end.join
+      it 'prints array values on separate lines' do
+        @board.instance_variable_set(:@indentation_level, 10)
+        @board.labeled('label', ['value1', 'value2'])
+        @output.string.split("\n").should == [
+          "#{' ' * 10}- label:",
+          "#{' ' * 12}- value1",
+          "#{' ' * 12}- value2",
+        ]
       end
     end
 
-    describe '#wrap_with_indent' do
-      it 'wrap_string with a default indentation of zero' do
-        UI.indentation_level = 0
-        UI.output.should == 0
-      end
-
-      it 'creates a first space the size of the string times the indentation' do
-        UI.indentation_level = 0
-        UI.output.should == ''
-      end
-    end
+    # describe '#wrap_with_indent' do
+    #   it 'wrap_string with a default indentation of zero' do
+    #     UI.indentation_level = 0
+    #     UI.output.should == 0
+    #   end
+    #
+    #   it 'creates a first space the size of the string times the indentation' do
+    #     UI.indentation_level = 0
+    #     UI.output.should == ''
+    #   end
+    # end
   end
 end

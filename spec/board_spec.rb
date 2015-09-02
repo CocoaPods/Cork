@@ -21,7 +21,7 @@ module Cork
       end
 
       it 'uses stdin by default for input' do
-        @board.input.should ==  $stdin
+        @board.input.should == $stdin
       end
 
       it 'uses stdout by default for output' do
@@ -178,7 +178,7 @@ module Cork
 
       it 'prints array values on separate lines' do
         @board.instance_variable_set(:@indentation_level, 10)
-        @board.labeled('label', ['value1', 'value2'])
+        @board.labeled('label', %w(value1 value2))
         @output.string.split("\n").should == [
           "#{' ' * 10}- label:",
           "#{' ' * 12}- value1",
@@ -193,10 +193,10 @@ module Cork
     #     UI.output.should == 0
     #   end
     #
-    #   it 'creates a first space the size of the string times the indentation' do
-    #     UI.indentation_level = 0
-    #     UI.output.should == ''
-    #   end
+    # it 'creates a first space the size of the string times the indentation' do
+    #   UI.indentation_level = 0
+    #   UI.output.should == ''
+    # end
     # end
   end
 end

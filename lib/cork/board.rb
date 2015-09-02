@@ -25,8 +25,8 @@ module Cork
     #        this defaults to true
     # @param [Boolean] silent When silent is true all output is supressed.
     #        This defaults to false.
-    # @param [Boolean] ansi When ansi is true output may contain ansi color codes.
-    #        This is true by default.
+    # @param [Boolean] ansi When ansi is true output may contain ansi
+    #        color codes. This is true by default.
     # @param [IO] input The file descriptor to read the user input.
     # @param [IO] out The file descriptor to print all output to.
     # @param [IO] err The file descriptor to print all errors to.
@@ -69,9 +69,10 @@ module Cork
     #
     #  @param [String]  message The message to print.
     #  @param [Array]   actions The actions that the user should take.
-    #  @param [Boolean] verbose_only When verbose_only is configured to true,
-    #                   the warning will only be printed when Board is configured
-    #                   to print verbose messages. This is false by default.
+    #  @param [Boolean] verbose_only When verbose_only is configured to
+    #                   true, the warning will only be printed when
+    #                   Board is configured to print verbose messages.
+    #                   This is false by default.
     #
     #  @return [void]
     #
@@ -245,10 +246,10 @@ module Cork
 
     # @todo Clean interface.
     #
-    #@param [String] message
+    # @param [String] message
     #       The message to print.
     #
-    #@param [String] verbose_prefix
+    # @param [String] verbose_prefix
     #        See #message
     #
     # @param [FixNum] relative_indentation
@@ -263,7 +264,9 @@ module Cork
 
     # @return [String] Wraps a string taking into account the width of the
     # terminal and an option indent. Adapted from
+    # rubocop:disable Metrics/LineLength
     # http://blog.macromates.com/2006/Wrapping-text wrapping-text-with-regular-expressions/
+    # rubocop:enable Metrics/LineLength
     #
     # @param [String] txt    The string to wrap
     #

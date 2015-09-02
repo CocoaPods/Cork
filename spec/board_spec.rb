@@ -187,6 +187,19 @@ module Cork
       end
     end
 
+    describe '#notice' do
+      it 'outputs the given string when not silent' do
+        @board.notice('Hello World')
+        @output.string.should == ("\n[!] Hello World".green + "\n")
+      end
+
+      it 'outputs the given string without color codes when ansi is disabled' do
+        @board = Board.new(:out => @output, :ansi => false)
+        @board.notice('Hello World')
+        @output.string.should == "\n[!] Hello World\n"
+      end
+    end
+
     # describe '#wrap_with_indent' do
     #   it 'wrap_string with a default indentation of zero' do
     #     UI.indentation_level = 0

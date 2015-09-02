@@ -1,3 +1,5 @@
+require 'colored'
+
 module Cork
   # Provides support for UI output. Cork provides support for nested
   # sections of information and for a verbose mode.

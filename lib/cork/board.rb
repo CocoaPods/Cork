@@ -259,6 +259,28 @@ module Cork
     #         when the message is printed.
     #
 
+    # Prints the stored warnings. This method is intended to be called at the
+    # end of the execution of the binary.
+    #
+    # @return [void]
+    #
+    def print_warnings
+      out.flush
+      warnings.each do |warning|
+        next if warning[:verbose_only] && !verbose?
+
+        message = "\n[!] #{warning[:message]}"
+        message = message.yellow if ansi?
+        err.puts(message)
+
+        warning[:actions].each do |action|
+          string = "- #{action}"
+          string = wrap_string(string, 4)
+          err.puts(string)
+        end
+      end
+    end
+
     private
 
     # @!group Helpers
@@ -324,24 +346,6 @@ module Cork
       else
         indented = TextWrapper.wrap_with_indent(string, indent, 9999)
         first_space << indented
-      end
-    end
-
-    # Prints the stored warnings. This method is intended to be called at the
-    # end of the execution of the binary.
-    #
-    # @return [void]
-    #
-    def print_warnings
-      STDOUT.flush
-      warnings.each do |warning|
-        next if warning[:verbose_only] && !verbose?
-        STDERR.puts("\n[!] #{warning[:message]}".yellow)
-        warning[:actions].each do |action|
-          string = "- #{action}"
-          string = wrap_string(string, 4)
-          puts(string)
-        end
       end
     end
   end

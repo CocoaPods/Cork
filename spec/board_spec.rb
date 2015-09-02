@@ -4,7 +4,8 @@ module Cork
   describe Board do
     before do
       @output = StringIO.new
-      @board = Board.new(:out => @output)
+      @error = StringIO.new
+      @board = Board.new(:out => @output, :err => @error)
     end
 
     describe '#initialize' do
@@ -30,6 +31,7 @@ module Cork
       end
 
       it 'uses stderr by default for errors' do
+        @board = Board.new
         @board.err.should == $stderr
       end
 
@@ -211,5 +213,42 @@ module Cork
     #   UI.output.should == ''
     # end
     # end
+
+    describe '#print_warnings' do
+      it 'prints the warning' do
+        @board.warn('everything is wrong!')
+        @board.print_warnings
+        @error.string.should == ("\n[!] everything is wrong!".yellow + "\n")
+      end
+
+      it 'prints the warning without color when ANSI is disabled' do
+        @board = Board.new(:err => @error, :ansi => false)
+        @board.warn('everything is wrong!')
+        @board.print_warnings
+        @error.string.should == "\n[!] everything is wrong!\n"
+      end
+
+      it 'prints available actions for each warning' do
+        @board.warn('warning', %w(action1 action2))
+        @board.print_warnings
+        @error.string.should == (
+          "\n[!] warning".yellow +
+          "\n    - action1\n    - action2\n"
+        )
+      end
+
+      it "doesn't print a verbose warning when verbose is disabled" do
+        @board.warn('everything is wrong!', [], true)
+        @board.print_warnings
+        @error.string.should == ''
+      end
+
+      it 'prints a verbose warning when verbose is enabled' do
+        @board = Board.new(:err => @error, :ansi => false, :verbose => true)
+        @board.warn('everything is wrong!', [], true)
+        @board.print_warnings
+        @error.string.should == "\n[!] everything is wrong!\n"
+      end
+    end
   end
 end

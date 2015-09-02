@@ -195,15 +195,17 @@ module Cork
     #        The message to print.
     #
     def info(message)
-      indentation = verbose? ? self.indentation_level : 0
+      indentation = verbose? ? @indentation_level : 0
       indented = wrap_string(message, indentation)
-      input.puts(indented)
+      puts(indented)
 
-      self.indentation_level += 2
-      @treat_titles_as_messages = true
-      yield if block_given?
-      @treat_titles_as_messages = false
-      self.indentation_level -= 2
+      if block_given?
+        @indentation_level += 2
+        @treat_titles_as_messages = true
+        yield
+        @treat_titles_as_messages = false
+        @indentation_level -= 2
+      end
     end
 
     # A title opposed to a section is always visible

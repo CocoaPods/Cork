@@ -134,6 +134,29 @@ module Cork
       end
     end
 
+    describe '#info' do
+      it 'prints the info message' do
+        @board.info('abc')
+        @output.string.should == "abc\n"
+      end
+
+      it 'indents information by indentation level when verbose is enabled' do
+        @board = Board.new(:out => @output, :verbose => true)
+        @board.info('abc')
+        @output.string.should == "  abc\n"
+      end
+
+      it 'increments indentation level during execution of a given block' do
+        @board.send(:indentation_level).should == 2
+
+        @board.info('abc') do
+          @board.send(:indentation_level).should == 4
+        end
+
+        @board.send(:indentation_level).should == 2
+      end
+    end
+
     describe '#path' do
       it 'creates a path relative to a given path' do
         path = @board.path('/lib/cork', Pathname('/lib'))

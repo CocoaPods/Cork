@@ -224,19 +224,16 @@ module Cork
       if @treat_titles_as_messages
         message(title, verbose_prefix)
       else
-        title = verbose_prefix + title if verbose?
-        title = "\n#{title}" if @title_level < 2
-        if (color = @title_colors[title_level])
-          title = title.send(color)
-        end
-        puts "#{title}"
+        puts_title(title, verbose_prefix)
       end
 
-      self.indentation_level += relative_indentation
-      self.title_level += 1
-      yield if block_given?
-      self.indentation_level -= relative_indenation
-      self.title_level -= 1
+      if block_given?
+        @indentation_level += relative_indentation
+        @title_level += 1
+        yield
+        @indentation_level -= relative_indentation
+        @title_level -= 1
+      end
     end
 
     # Prints a verbose message taking an optional verbose prefix and
@@ -349,6 +346,38 @@ module Cork
         indented = TextWrapper.wrap_with_indent(string, indent, 9999)
         first_space << indented
       end
+    end
+
+    def puts_title(title, verbose_prefix)
+      title = verbose_prefix + title if verbose?
+      title = "\n#{title}" if @title_level < 2
+      if ansi? && (color = @title_colors[title_level])
+        title = title.send(color)
+      end
+      puts "#{title}"
+    end
+
+    # Prints a message respecting the current indentation level and
+    # wrapping it to the terminal width if necessary.
+    #
+    def puts_indented(message = '')
+      indented = wrap_string(message, @indentation_level)
+      puts(indented)
+    end
+
+    # Prints a verbose message taking an optional verbose prefix and
+    # a relative indentation valid for the UI action in the passed
+    # block.
+    #
+    # @todo Clean interface.
+    #
+    def message(message, verbose_prefix = '', relative_indentation = 2)
+      message = verbose_prefix + message if verbose?
+      puts_indented message if verbose?
+
+      @indentation_level += relative_indentation
+      yield if block_given?
+      @indentation_level -= relative_indentation
     end
   end
 end

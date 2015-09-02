@@ -155,6 +155,44 @@ module Cork
 
         @board.send(:indentation_level).should == 2
       end
+
+      it 'makes titles within the info a message when verbose is enabled' do
+        @board = Board.new(:out => @output, :verbose => true)
+        @board.info('info') do
+          @board.title('title')
+        end
+
+        @output.string.should == "  info\n    title\n"
+      end
+    end
+
+    describe '#title' do
+      it 'prints the title' do
+        @board.title('abc')
+        @output.string.should == "\nabc".yellow + "\n"
+      end
+
+      it 'does not use colors when ansi is disabled' do
+        @board = Board.new(:out => @output, :ansi => false)
+        @board.title('abc')
+        @output.string.should == "\nabc\n"
+      end
+
+      it 'uses a different colour for titles within a title' do
+        @board.title('abc') do
+          @board.title('subtitle')
+        end
+        @output.string.should == "\nabc".yellow + "\n" + \
+          "\nsubtitle".green + "\n"
+      end
+
+      it 'increases the indentation during the execution of a given block' do
+        @board.send(:indentation_level).should == 2
+        @board.title('abc') do
+          @board.send(:indentation_level).should == 4
+        end
+        @board.send(:indentation_level).should == 2
+      end
     end
 
     describe '#path' do

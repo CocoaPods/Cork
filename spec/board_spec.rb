@@ -1,5 +1,6 @@
 require File.expand_path('../spec_helper', __FILE__)
 
+
 module Cork
   describe Board do
     before do
@@ -65,7 +66,6 @@ module Cork
         board.err.should == $stderr
       end
     end
-
     describe '#puts' do
       it 'outputs the given string with a new line' do
         @board.puts('abc')
@@ -178,7 +178,7 @@ module Cork
         @output.string.should == "\nabc\n"
       end
 
-      it 'uses a different colour for titles within a title' do
+      it 'uses a different color for titles within a title' do
         @board.title('abc') do
           @board.title('subtitle')
         end
@@ -249,6 +249,29 @@ module Cork
         ]
       end
     end
+
+    describe '#section' do
+      it 'prints the title ' do
+        @board = Board.new(:out => @output, :err => @error, :verbose => true)
+        @board.section('abc')
+        @output.string.should == "\nabc".yellow + "\n"
+      end
+
+      # it 'outputs the title when verbose is enabled' do
+      # @board.section('abc')
+      #  @output.section.=
+      # end
+
+      it 'does not print a verbose section when verbose is disabled' do
+        @board = Board.new(:out => @output, :err => @error)
+        @board.section('title')
+        @output.string.should == "title\n"
+       end
+
+      # it 'outputs title if title level is less than one' do
+      #
+      # end
+      end
 
     describe '#notice' do
       it 'outputs the given string when not silent' do

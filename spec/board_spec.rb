@@ -251,27 +251,25 @@ module Cork
     end
 
     describe '#section' do
-      it 'prints the title ' do
+      it 'prints the title' do
+        @board.section('abc')
+        @output.string.should == "abc\n"
+      end
+
+      it 'outputs the title when verbose is enabled' do
         @board = Board.new(:out => @output, :err => @error, :verbose => true)
         @board.section('abc')
         @output.string.should == "\nabc".yellow + "\n"
       end
 
-      # it 'outputs the title when verbose is enabled' do
-      # @board.section('abc')
-      #  @output.section.=
-      # end
+      it 'does not output titles for sub-sections' do
+        @board.section('section') do
+          @board.section('subsection')
+        end
 
-      it 'does not print a verbose section when verbose is disabled' do
-        @board = Board.new(:out => @output, :err => @error)
-        @board.section('title')
-        @output.string.should == "title\n"
-       end
-
-      # it 'outputs title if title level is less than one' do
-      #
-      # end
+        @output.string.should == "section\n"
       end
+    end
 
     describe '#notice' do
       it 'outputs the given string when not silent' do

@@ -164,25 +164,6 @@ module Cork
       @title_level -= 1
     end
 
-    # In verbose mode it shows the sections and the contents.
-    # In normal mode it just prints the title without indentation and color.
-    #
-    # @return [void]
-    #
-    def titled_section(title, relative_indentation = 0, verbose_prefix = '')
-      if verbose?
-        title(title, verbose_prefix, relative_indentation)
-      else
-        puts title
-      end
-
-      self.indentation_level += relative_indentation
-      self.title_level += 1
-      yield if block_given?
-      self.indentation_level -= relative_indentation
-      self.title_level -= 1
-    end
-
     # Prints an info to the user. The info is always displayed.
     # It respects the current indentation level only in verbose
     # mode.

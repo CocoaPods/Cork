@@ -1,12 +1,15 @@
 require File.expand_path('../spec_helper', __FILE__)
 
-
 module Cork
   describe Board do
     before do
       @output = StringIO.new
       @error = StringIO.new
       @board = Board.new(:out => @output, :err => @error)
+
+      def @output.winsize
+        [20, 9999]
+      end
     end
 
     describe '#initialize' do
@@ -163,6 +166,27 @@ module Cork
         end
 
         @output.string.should == "  info\n    title\n"
+      end
+
+      it 'wrap strings at the outputs winsize' do
+        def @output.winsize
+          [20, 80]
+        end
+
+        @board.info('Lorem ipsum dolor sit amet, consectetur adipiscing elit.' \
+          ' Morbi eu dolor dictum, sagittis sem ornare, eleifend eros.')
+        @output.string.should == 'Lorem ipsum dolor sit amet, consectetur ' \
+          "adipiscing elit. Morbi eu dolor dictum,\n" \
+          "sagittis sem ornare, eleifend eros.\n"
+      end
+
+      it 'does not wrap when wrapping is disabled' do
+        @board.disable_wrap = true
+        @board.info('Lorem ipsum dolor sit amet, consectetur adipiscing elit.' \
+          ' Morbi eu dolor dictum, sagittis sem ornare, eleifend eros.')
+        @output.string.should == 'Lorem ipsum dolor sit amet, consectetur ' \
+          'adipiscing elit. Morbi eu dolor dictum, ' \
+          "sagittis sem ornare, eleifend eros.\n"
       end
     end
 

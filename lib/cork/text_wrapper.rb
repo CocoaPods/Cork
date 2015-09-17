@@ -13,17 +13,17 @@ module Cork
     # @param    [Fixnum] indent
     #          The number of spaces to insert before the string.
     #
-    # @param   [Fixnum] max_width
-    #         The maximum width to use to format the string if the terminal
+    # @param   [Fixnum] width
+    #         The width to use to format the string if the terminal
     #         is too wide.
     #
-    def wrap_formatted_text(string, indent = 0, max_width = 80)
+    def wrap_formatted_text(string, indent = 0, width = 80)
       paragraphs = strip_heredoc(string).split("\n\n")
       paragraphs = paragraphs.map do |paragraph|
         if paragraph.start_with?(' ' * 4)
           paragraphs.gsub!(/\n/, "\n#{' ' * indent}")
         else
-          paragraph = wrap_with_indent(paragraph, indent, max_width)
+          paragraph = wrap_with_indent(paragraph, indent, width)
         end
         paragraph.insert(0, ' ' * indent).rstrip
       end
@@ -41,17 +41,11 @@ module Cork
     # @param  [Fixnum] indent
     #         The number of spaces to insert before the string.
     #
-    # @param  [Fixnum] max_width
-    #         The maximum width to use to format the string if the terminal
+    # @param  [Fixnum] width
+    #         The width to use to format the string if the terminal
     #         is too wide.
     #
-    def wrap_with_indent(string, indent = 0, max_width = 80)
-      if terminal_width == 0
-        width = max_width
-      else
-        width = [terminal_width, max_width].min
-      end
-
+    def wrap_with_indent(string, indent = 0, width = 80)
       full_line = string.gsub("\n", ' ')
       available_width = width - indent
       space = ' ' * indent
@@ -79,24 +73,5 @@ module Cork
     end
 
     module_function :strip_heredoc
-
-    # @!group Private helpers
-    #---------------------------------------------------------------------#
-
-    # @return [Fixnum] The width of the current terminal unless being piped.
-    #
-    def terminal_width
-      unless @terminal_width
-        if !ENV['CORK_DISABLE_AUTO_WRAP'] &&
-            STDOUT.tty? && system('which tput > /dev/null 2>&1')
-          @terminal_width = `tput cols`.to_i
-        else
-          @terminal_width = 0
-        end
-      end
-      @terminal_width
-    end
-
-    module_function :terminal_width
   end
 end

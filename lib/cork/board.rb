@@ -322,7 +322,8 @@ module Cork
       if disable_wrap
         first_space << string
       else
-        indented = TextWrapper.wrap_with_indent(string, indent, 9999)
+        columns = out.winsize[1]
+        indented = TextWrapper.wrap_with_indent(string, indent, columns)
         first_space << indented
       end
     end

@@ -60,6 +60,14 @@ module Cork
       out.print(message) unless silent?
     end
 
+    # Prints a message respecting the current indentation level and
+    # wrapping it to the terminal width if necessary.
+    #
+    def puts_indented(message = '')
+      indented = wrap_string(message, @indentation_level)
+      puts(indented)
+    end
+
     # Gets input from the configured input.
     #
     def gets
@@ -335,14 +343,6 @@ module Cork
         title = title.send(color)
       end
       puts "#{title}"
-    end
-
-    # Prints a message respecting the current indentation level and
-    # wrapping it to the terminal width if necessary.
-    #
-    def puts_indented(message = '')
-      indented = wrap_string(message, @indentation_level)
-      puts(indented)
     end
 
     # Prints a verbose message taking an optional verbose prefix and

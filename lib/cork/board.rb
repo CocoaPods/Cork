@@ -160,10 +160,11 @@ module Cork
     #        The indentation level relative to the current,
     #        when the message is printed.
     #
-    def section(title, verbose_prefix = '', relative_indentation = 0)
+    def section(title, verbose_prefix = '', relative_indentation = 0,
+                titled = false)
       if verbose?
         title(title, verbose_prefix, relative_indentation)
-      elsif title_level < 1
+      elsif title_level < 1 || titled
         puts title
       end
 

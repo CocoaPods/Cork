@@ -21,6 +21,8 @@ module Cork
     attr_reader :ansi
     alias_method :ansi?, :ansi
 
+    attr_reader :indentation_level
+
     # Initialize a new instance.
     #
     # @param [Boolean] verbose When verbose is true verbose output is printed.
@@ -285,7 +287,7 @@ module Cork
     # @return [String]       The formatted string.
     #
 
-    attr_accessor :indentation_level
+    attr_writer :indentation_level
     attr_accessor :title_level
 
     # Prints a title taking an optional verbose prefix and

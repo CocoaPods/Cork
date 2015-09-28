@@ -295,6 +295,21 @@ module Cork
       end
     end
 
+    # Prints a verbose message taking an optional verbose prefix and
+    # a relative indentation valid for the UI action in the passed
+    # block.
+    #
+    # @todo Clean interface.
+    #
+    def message(message, verbose_prefix = '', relative_indentation = 2)
+      message = verbose_prefix + message if verbose?
+      puts_indented message if verbose?
+
+      @indentation_level += relative_indentation
+      yield if block_given?
+      @indentation_level -= relative_indentation
+    end
+
     private
 
     # @!group Helpers
@@ -371,21 +386,6 @@ module Cork
         title = title.send(color)
       end
       puts "#{title}"
-    end
-
-    # Prints a verbose message taking an optional verbose prefix and
-    # a relative indentation valid for the UI action in the passed
-    # block.
-    #
-    # @todo Clean interface.
-    #
-    def message(message, verbose_prefix = '', relative_indentation = 2)
-      message = verbose_prefix + message if verbose?
-      puts_indented message if verbose?
-
-      @indentation_level += relative_indentation
-      yield if block_given?
-      @indentation_level -= relative_indentation
     end
   end
 end

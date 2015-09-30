@@ -21,7 +21,8 @@ module Cork
     attr_reader :ansi
     alias_method :ansi?, :ansi
 
-    attr_reader :indentation_level
+    attr_accessor :indentation_level
+    attr_accessor :title_level
 
     # Initialize a new instance.
     #

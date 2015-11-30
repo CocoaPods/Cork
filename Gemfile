@@ -8,5 +8,8 @@ group :development do
   gem 'mocha-on-bacon'
   gem 'prettybacon'
 
+
   gem 'rubocop'
+  gem 'rake'
+  gem 'rspec-core'
 end

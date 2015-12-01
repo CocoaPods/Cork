@@ -11,5 +11,4 @@ group :development do
 
   gem 'rubocop'
   gem 'rake'
-  gem 'rspec-core'
 end

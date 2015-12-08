@@ -1,3 +1,4 @@
+require 'bundler/setup'
 require 'simplecov'
 SimpleCov.start
 if ENV['CI'] == 'true'

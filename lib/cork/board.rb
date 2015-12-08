@@ -315,21 +315,6 @@ module Cork
     #        when the message is printed.
     #
 
-    # @!group Helpers
-    #-------------------------------------------------------------------#
-
-    # @return [String] Wraps a string taking into account the width of the
-    # terminal and an option indent. Adapted from http://blog.macromates.com/2006/wrapping-text-with-regular-expressions/
-    #
-    # @param [String] txt The string to wrap=
-    #
-    # @param [String] indent The string to use to indent the result.
-    #
-    # @return [String]    The formatted string.
-    #
-    # @note If Cork is not being run in a terminal or the width of the
-    # terminal is too small a width of 80 is assumed.
-    #
     def wrap_string(string, indent = 0)
       first_space = ' ' * indent
       if disable_wrap

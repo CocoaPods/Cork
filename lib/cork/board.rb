@@ -289,20 +289,6 @@ module Cork
     private
 
     # @!group Helpers
-    #----------------------------------------------------------------------#
-
-    # @return [String] Wraps a string taking into account the width of the
-    # terminal and an option indent. Adapted from
-    # rubocop:disable Metrics/LineLength
-    # http://blog.macromates.com/2006/Wrapping-text wrapping-text-with-regular-expressions/
-    # rubocop:enable Metrics/LineLength
-    #
-    # @param [String] txt    The string to wrap
-    #
-    # @param [String] indent The string to use to indent the result.
-    #
-    # @return [String]       The formatted string.
-    #
 
     attr_writer :indentation_level
     attr_accessor :title_level

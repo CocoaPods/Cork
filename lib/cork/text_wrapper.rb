@@ -42,8 +42,7 @@ module Cork
     #         The number of spaces to insert before the string.
     #
     # @param  [Fixnum] width
-    #         The width to use to format the string if the terminal
-    #         is too wide.
+    #         The width to use when formatting the string in the terminal
     #
     def wrap_with_indent(string, indent = 0, width = 80)
       full_line = string.gsub("\n", ' ')

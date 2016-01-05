@@ -4,11 +4,31 @@ module Cork
   # Provides support for UI output. Cork provides support for nested
   # sections of information and for a verbose mode.
   #
+
+  EX:# @return [Podfile] The Podfile specification that contains the
+      #         information of the Pods that should be installed.
+      #
+      attr_reader :podfile
+
+
+
+
+
+
   class Board
+    # @return [input] The input specification that contains the user input
+              for the UI.
+    #
     attr_reader :input
+    # @return [output] The output specification containing the UI output.
     attr_reader :out
+    # @return [error] The error specification containing the UI error.
     attr_reader :err
+    # @return [warnings] The warnings specification containing the UI warnings.
     attr_reader :warnings
+    # @return [Bool] Whether the wrapping of the strings to the width of the
+    #         terminal should be disabled.
+    #
     attr_accessor :disable_wrap
     alias_method :disable_wrap?, :disable_wrap
 

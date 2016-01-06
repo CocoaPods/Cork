@@ -10,12 +10,7 @@ module Cork
       #
       attr_reader :podfile
 
-
-
-
-
-
-  class Board
+class Board
     # @return [input] The input specification that contains the user input
               for the UI.
     #

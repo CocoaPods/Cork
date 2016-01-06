@@ -5,7 +5,7 @@ module Cork
   # sections of information and for a verbose mode.
   #
 
-  EX:# @return [Podfile] The Podfile specification that contains the
+  # @return [Podfile] The Podfile specification that contains the
       #         information of the Pods that should be installed.
       #
       attr_reader :podfile

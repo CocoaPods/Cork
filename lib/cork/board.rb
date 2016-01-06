@@ -12,7 +12,7 @@ module Cork
 
 class Board
     # @return [input] The input specification that contains the user input
-              for the UI.
+    #          for the UI.
     #
     attr_reader :input
     # @return [output] The output specification containing the UI output.

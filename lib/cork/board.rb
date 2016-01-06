@@ -1,16 +1,16 @@
 require 'colored'
 
 module Cork
-  # Provides support for UI output. Cork provides support for nested
-  # sections of information and for a verbose mode.
-  #
+    # Provides support for UI output. Cork provides support for nested
+    # sections of information and for a verbose mode.
+    #
 
-  # @return [Podfile] The Podfile specification that contains the
-      #         information of the Pods that should be installed.
-      #
-      attr_reader :podfile
+     # @return [Podfile] The Podfile specification that contains the
+     #         information of the Pods that should be installed.
+     #
+  attr_reader :podfile
 
-class Board
+    class Board
     # @return [input] The input specification that contains the user input
     #          for the UI.
     #
@@ -349,5 +349,5 @@ class Board
       end
       puts "#{title}"
     end
-  end
+    end
 end

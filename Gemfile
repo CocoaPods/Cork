@@ -11,4 +11,5 @@ group :development do
 
   gem 'rubocop'
   gem 'rake'
+  gem 'codecov', :require => false
 end

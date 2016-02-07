@@ -5,11 +5,6 @@ module Cork
   # sections of information and for a verbose mode.
   #
 
-  # @return [Podfile] The Podfile specification that contains the
-  # information of the Pods that should be installed.
-  #
-  attr_reader :podfile
-
   class Board
     # @return [input] The input specification that contains the user input
     #          for the UI.

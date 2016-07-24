@@ -6,10 +6,7 @@ module Cork
       @output = StringIO.new
       @error = StringIO.new
       @board = Board.new(:out => @output, :err => @error)
-
-      def @output.winsize
-        [20, 9999]
-      end
+      @output.stubs(:winsize).returns([20, 9999])
     end
 
     describe '#initialize' do
@@ -169,9 +166,8 @@ module Cork
       end
 
       it 'wrap strings at the outputs winsize' do
-        def @output.winsize
-          [20, 80]
-        end
+        @output.expects(:tty?).returns(true)
+        @output.expects(:winsize).returns([20, 80])
 
         @board.info('Lorem ipsum dolor sit amet, consectetur adipiscing elit.' \
           ' Morbi eu dolor dictum, sagittis sem ornare, eleifend eros.')
@@ -182,6 +178,16 @@ module Cork
 
       it 'does not wrap when wrapping is disabled' do
         @board.disable_wrap = true
+        @board.info('Lorem ipsum dolor sit amet, consectetur adipiscing elit.' \
+          ' Morbi eu dolor dictum, sagittis sem ornare, eleifend eros.')
+        @output.string.should == 'Lorem ipsum dolor sit amet, consectetur ' \
+          'adipiscing elit. Morbi eu dolor dictum, ' \
+          "sagittis sem ornare, eleifend eros.\n"
+      end
+
+      it 'does not wrap when the output is not a tty' do
+        @output.expects(:tty?).returns(false)
+
         @board.info('Lorem ipsum dolor sit amet, consectetur adipiscing elit.' \
           ' Morbi eu dolor dictum, sagittis sem ornare, eleifend eros.')
         @output.string.should == 'Lorem ipsum dolor sit amet, consectetur ' \

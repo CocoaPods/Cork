@@ -327,7 +327,7 @@ module Cork
 
     def wrap_string(string, indent = 0)
       first_space = ' ' * indent
-      if disable_wrap
+      if disable_wrap || !out.tty?
         first_space << string
       else
         require 'io/console'

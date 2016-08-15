@@ -1,3 +1,14 @@
+## Master
+
+##### Enhancements
+
+* None.  
+
+##### Bug Fixes
+
+* None.  
+
+
 ## 0.2.0 (2016-08-15)
 
 * Disables wrapping when not in a tty - segiddins

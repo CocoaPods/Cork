@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     cork (0.2.0)
-      colored (~> 1.2)
+      colored2 (~> 3.1)
 
 GEM
   remote: https://rubygems.org/
@@ -15,7 +15,7 @@ GEM
       json
       simplecov
       url
-    colored (1.2)
+    colored2 (3.1.1)
     docile (1.1.5)
     json (1.8.3)
     metaclass (0.0.4)
@@ -59,4 +59,4 @@ DEPENDENCIES
   rubocop
 
 BUNDLED WITH
-   1.12.5
+   1.13.6

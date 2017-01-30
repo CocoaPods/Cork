@@ -1,4 +1,4 @@
-require 'colored'
+require 'colored2'
 
 module Cork
   # provides support for UI output. Cork provides support for nested

@@ -2,7 +2,9 @@
 
 ##### Enhancements
 
-* None.  
+* Use the colored2 gem instead of colored.  
+  [Orta Therox](https://github.com/orta)
+  [xcodeproj#463](https://github.com/CocoaPods/Xcodeproj/pull/463)
 
 ##### Bug Fixes
 

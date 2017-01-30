@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.require_paths = %w{ lib }
 
-  s.add_runtime_dependency     'colored',   '~> 1.2'
+  s.add_runtime_dependency     'colored2',   '~> 3.1'
 
   s.add_development_dependency 'bundler',   '~> 1.3'
   s.add_development_dependency 'rake',      '>= 10.0'

@@ -5,9 +5,9 @@ Gem::Specification.new do |s|
   s.name     = "cork"
   s.version  = Cork::VERSION
   s.license  = "MIT"
-  s.email    = ["k.isabel.sandoval@gmail.com"]
+  s.email    = ["orta.therox@gmail.com", "k.isabel.sandoval@gmail.com"]
   s.homepage = "https://github.com/CocoaPods/Cork"
-  s.authors  = ["Karla Sandoval"]
+  s.authors  = ["Orta Therox", "Karla Sandoval"]
   s.summary  = "A delightful CLI UI module."
 
   s.files = Dir["lib/**/*.rb"] + %w{ README.md LICENSE CHANGELOG.md }

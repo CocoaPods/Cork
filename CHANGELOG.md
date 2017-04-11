@@ -1,5 +1,7 @@
 ## Master
 
+## 0.3.0 (2017-004-11)
+
 ##### Enhancements
 
 * Use the colored2 gem instead of colored.  
